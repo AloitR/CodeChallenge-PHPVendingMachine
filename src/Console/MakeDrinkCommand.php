@@ -8,9 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use GetWith\CoffeeMachine\Models\Coffee;
-use GetWith\CoffeeMachine\Models\Tea;
-use GetWith\CoffeeMachine\Models\Chocolate;
+use GetWith\CoffeeMachine\Factories\DrinkFactory;
 
 class MakeDrinkCommand extends Command
 {
@@ -52,7 +50,6 @@ class MakeDrinkCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $drink = null;
         $message = '';
 
         $drinkType = strtolower($input->getArgument('drink-type'));
@@ -61,20 +58,7 @@ class MakeDrinkCommand extends Command
         $extraHot = $input->getOption('extra-hot');
 
         try {
-
-            switch ($drinkType) {
-                case 'tea':
-                    $drink = new Tea;
-                    break;
-                case 'coffee':
-                    $drink = new Coffee;
-                    break;
-                case 'chocolate':
-                    $drink = new Chocolate;
-                    break;
-                default:
-                    throw new \WrongDrinkTypeException('The drink type should be tea, coffee or chocolate.');
-            }
+            $drink = (new \GetWith\CoffeeMachine\Factories\DrinkFactory)->makeDrink($drinkType);
 
             $message .= $drink->buyDrink($money);
             $message .= $drink->addExtraHot($extraHot);
