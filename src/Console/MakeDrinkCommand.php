@@ -53,26 +53,38 @@ class MakeDrinkCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $drink = null;
+        $message = '';
+
         $drinkType = strtolower($input->getArgument('drink-type'));
         $money = $input->getArgument('money');
+        $sugars = $input->getArgument('sugars');
+        $extraHot = $input->getOption('extra-hot');
 
-        switch ($drinkType) {
-            case 'tea':
-                $drink = new Tea;
-                break;
-            case 'coffee':
-                $drink = new Coffee;
-                break;
-            case 'chocolate':
-                $drink = new Chocolate;
-                break;
+        try {
+
+            switch ($drinkType) {
+                case 'tea':
+                    $drink = new Tea;
+                    break;
+                case 'coffee':
+                    $drink = new Coffee;
+                    break;
+                case 'chocolate':
+                    $drink = new Chocolate;
+                    break;
+                default:
+                    throw new \WrongDrinkTypeException('The drink type should be tea, coffee or chocolate.');
+            }
+
+            $message .= $drink->buyDrink($money);
+            $message .= $drink->addExtraHot($extraHot);
+            $message .= $drink->addSugar($sugars);
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            return 0;
         }
 
-        if($money > $drink->getPrice()) {
-           $output->writeln('You have ordered a ' . $drink->getType());
-        }else{
-           $output->writeln('The ' . $drink->getType() . ' costs ' . $drink->getPrice() );
-       }
+        $output->writeln($message);
 
         return 0;
     }
