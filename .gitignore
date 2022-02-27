@@ -3,3 +3,9 @@
 /test.xml
 /.phpunit.result.cache
 /clover.xml
+docker/build
+docker/composer
+docker/console
+docker/infection
+docker/test
+docker/images/php-cli/Dockerfile
