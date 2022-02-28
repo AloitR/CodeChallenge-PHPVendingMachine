@@ -1,7 +1,12 @@
 {
     "require": {
         "symfony/console": "^5.2",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "doctrine/orm": "^2.11",
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "symfony/flex": "^2.1",
+        "symfony/runtime": "^6.0"
     },
     "require-dev": {
         "infection/infection": "^0.21"
@@ -15,7 +20,15 @@
     },
     "config": {
         "allow-plugins": {
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
     }
 }
