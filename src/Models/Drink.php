@@ -1,7 +1,6 @@
 <?php
 
 namespace GetWith\CoffeeMachine\Models;
-use Exception;
 use GetWith\CoffeeMachine\Exceptions\NotEnoughMoneyException;
 use GetWith\CoffeeMachine\Traits\Options;
 
@@ -25,6 +24,9 @@ class Drink {
         return $this->price;
     }
 
+    /**
+     * @throws NotEnoughMoneyException
+     */
     public function buyDrink($money): string
     {
         if ($money >= $this->getPrice()) {

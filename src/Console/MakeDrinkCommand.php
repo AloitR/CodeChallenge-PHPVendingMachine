@@ -2,6 +2,7 @@
 
 namespace GetWith\CoffeeMachine\Console;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,7 +45,7 @@ class MakeDrinkCommand extends Command
             'extra-hot',
             'e',
             InputOption::VALUE_NONE,
-            $description = 'If the user wants to make the drink extra hot'
+            'If the user wants to make the drink extra hot'
         );
     }
 
@@ -58,18 +59,16 @@ class MakeDrinkCommand extends Command
         $extraHot = $input->getOption('extra-hot');
 
         try {
-            $drink = (new \GetWith\CoffeeMachine\Factories\DrinkFactory)->makeDrink($drinkType);
-
+            $drink = DrinkFactory::makeDrink($drinkType);
             $message .= $drink->buyDrink($money);
             $message .= $drink->addExtraHot($extraHot);
             $message .= $drink->addSugar($sugars);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln($e->getMessage());
             return 0;
         }
 
         $output->writeln($message);
-
         return 0;
     }
 }

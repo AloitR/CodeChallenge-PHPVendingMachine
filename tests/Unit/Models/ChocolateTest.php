@@ -1,20 +1,15 @@
 <?php
 
-namespace GetWith\CoffeeMachine\Tests\Integration\Console;
+namespace GetWith\CoffeeMachine\Tests\Unit\Models;
 
-use GetWith\CoffeeMachine\Console\MakeDrinkCommand;
+use Exception;
 use GetWith\CoffeeMachine\Exceptions\NotEnoughMoneyException;
 use GetWith\CoffeeMachine\Exceptions\WrongSugarAmountException;
 use GetWith\CoffeeMachine\Models\Chocolate;
-use GetWith\CoffeeMachine\Tests\Integration\IntegrationTestCase;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class ChocolateTest extends TestCase
 {
-    protected function setUp(): void{
-        parent::setUp();
-    }
 
     public function testNotEnoughMoney(){
         $drink = new Chocolate;
@@ -33,24 +28,37 @@ class ChocolateTest extends TestCase
         $this->assertSame('You have ordered a chocolate', $drink->buyDrink(4));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testWrongExceedingSugar(){
         $drink = new Chocolate;
         $this->expectException(WrongSugarAmountException::class);
         $drink->addSugar(4);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testWrongNegativeSugar(){
         $drink = new Chocolate;
         $this->expectException(WrongSugarAmountException::class);
         $drink->addSugar(-4);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testDecimalSugar(){
         $drink = new Chocolate;
         $this->expectException(WrongSugarAmountException::class);
         $drink->addSugar(1.4);
     }
 
+    /**
+     * @throws NotEnoughMoneyException
+     * @throws Exception
+     */
     public function testCorrectSugar(){
         $drink = new Chocolate;
         $message = $drink->buyDrink(2);
@@ -58,6 +66,10 @@ class ChocolateTest extends TestCase
         $this->assertSame('You have ordered a chocolate with 1 sugars (stick included)', $message);
     }
 
+    /**
+     * @throws NotEnoughMoneyException
+     * @throws Exception
+     */
     public function testCorrectHot(){
         $drink = new Chocolate;
         $message = $drink->buyDrink(2);

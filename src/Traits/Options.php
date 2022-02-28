@@ -10,15 +10,18 @@ trait Options {
     public bool $extraHot;
     public bool $stick;
 
-    public function setSugars($sugars){
+    public function setSugars($sugars): void
+    {
         $this->sugars = $sugars;
     }
 
-    public function setExtraHot($extraHot){
+    public function setExtraHot($extraHot): void
+    {
         $this->extraHot = $extraHot;
     }
 
-    public function setStick($stick){
+    public function setStick($stick): void
+    {
         $this->stick = $stick;
     }
 
@@ -26,15 +29,11 @@ trait Options {
      * @throws Exception
      */
     public function addSugar($sugars): string {
-        switch ($sugars) {
-            case 0:
-                return '';
-            case 1:
-            case 2:
-                return ' with '.$sugars.' sugars (stick included)';
-            default:
-                throw new WrongSugarAmountException('The number of sugars should be between 0 and 2.');
-        }
+        return match ($sugars) {
+            0 => '',
+            1, 2 => ' with ' . $sugars . ' sugars (stick included)',
+            default => throw new WrongSugarAmountException('The number of sugars should be between 0 and 2.'),
+        };
     }
 
     public function addExtraHot($extraHot): string {
